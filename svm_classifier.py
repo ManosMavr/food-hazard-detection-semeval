@@ -22,14 +22,14 @@ title_clf_svm = Pipeline([
 def train(clf,column):
     for label in ('hazard-category', 'product-category', 'hazard', 'product'):
         print(label.upper())
-        clf.fit(trainset['column'], trainset[label]) # Fitiing the model in the train set
+        clf.fit(trainset[column], trainset[label]) # Fitiing the model in the train set
         print(f'Finished training for {label}.')
         
         # get development scores:
-        val_data[label] = clf.predict(val_data['column'])
+        val_data[label] = clf.predict(val_data[column])
         
     
-#train(title_clf_svm, 'title')
+train(title_clf_svm, 'title')
 
 title_svm_pred_path = 'predictions/title_svm'
 
@@ -53,7 +53,7 @@ text_clf_svm = Pipeline([
     ])
 
 
-#train(text_clf_svm, 'text')
+train(text_clf_svm, 'text')
 
 text_svm_pred_path = 'predictions/text_svm'
 
