@@ -31,16 +31,17 @@ def train(clf,column):
     
 train(title_clf_svm, 'title')
 
+
 title_svm_pred_path = 'predictions/title_svm'
 
 #Create the folder to save the predictions
 os.makedirs(title_svm_pred_path, exist_ok=True)
 
 #Defining the file path
-file_path = os.path.join(title_svm_pred_path, 'submission.csv')
+title_file_path = os.path.join(title_svm_pred_path, 'submission.csv')
 
 #Saving the DataFrame to the csv file
-val_data.to_csv(file_path, index=False)
+val_data.to_csv(title_file_path, index=False)
 
 
 
@@ -55,13 +56,14 @@ text_clf_svm = Pipeline([
 
 train(text_clf_svm, 'text')
 
+
 text_svm_pred_path = 'predictions/text_svm'
 
 #Create the folder to save the predictions
 os.makedirs(text_svm_pred_path, exist_ok=True)
 
 #Defining the file path
-file_path = os.path.join(text_svm_pred_path, 'submission.csv')
+text_file_path = os.path.join(text_svm_pred_path, 'submission.csv')
 
 #Saving the DataFrame to the csv file
-val_data.to_csv(file_path, index=False)
+val_data.to_csv(text_file_path, index=False)
