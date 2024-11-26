@@ -8,10 +8,6 @@ from sklearn.preprocessing import LabelEncoder
 import numpy as np
 import pandas as pd
 
-#Loading the data
-trainset = pd.read_csv('datasets/incidents_train.csv', index_col=0)
-val_data = pd.read_csv('datasets/incidents_val.csv', index_col=0)
-
 
 
 # Neural Network Definition
@@ -104,35 +100,39 @@ def training(vectorizer,column):
         print(f"Predictions for {label} saved to '{label}' column.")
 
 
+if __name__ == "__main__":
+    #Loading the data
+    trainset = pd.read_csv('datasets/incidents_train.csv', index_col=0)
+    val_data = pd.read_csv('datasets/incidents_val.csv', index_col=0)
+
+    #Initializing the folder path
+    title_nn_pred_path = 'predictions/title_nn'
+    text_nn_pred_path = 'predictions/text_nn'
+
+    #Create the folder to save the predictions
+    os.makedirs(title_nn_pred_path, exist_ok=True)
+    os.makedirs(text_nn_pred_path, exist_ok=True)
+
+    #Defining the file path
+    title_file_path = os.path.join(title_nn_pred_path, 'submission.csv')
+    text_file_path = os.path.join(text_nn_pred_path, 'submission.csv')
 
 
+    # TF-IDF Vectorizer for title
+    title_tfidf_vect = TfidfVectorizer(strip_accents='unicode', analyzer='char', ngram_range=(3, 6), max_df=0.5, min_df=3)
 
-title_nn_pred_path = 'predictions/title_nn'
-text_nn_pred_path = 'predictions/text_nn'
+    training(title_tfidf_vect,'title')
 
-#Create the folder to save the predictions
-os.makedirs(title_nn_pred_path, exist_ok=True)
-os.makedirs(text_nn_pred_path, exist_ok=True)
+    #Saving the DataFrame to the csv file
+    val_data.to_csv(title_file_path, index=False)
 
-#Defining the file path
-title_file_path = os.path.join(title_nn_pred_path, 'submission.csv')
-text_file_path = os.path.join(text_nn_pred_path, 'submission.csv')
+    #Resetting the trainset
+    trainset = pd.read_csv('datasets/incidents_train.csv', index_col=0)
 
+    # TF-IDF Vectorizer for text
+    text_tfidf_vect = TfidfVectorizer(strip_accents='unicode', analyzer='word', ngram_range=(1,2), max_df=0.5, min_df=5)
 
-# TF-IDF Vectorizer for title
-title_tfidf_vect = TfidfVectorizer(strip_accents='unicode', analyzer='char', ngram_range=(3, 6), max_df=0.5, min_df=3)
+    training(text_tfidf_vect,'text')
 
-training(title_tfidf_vect,'title')
-
-#Saving the DataFrame to the csv file
-val_data.to_csv(title_file_path, index=False)
-
-
-
-# TF-IDF Vectorizer for text
-text_tfidf_vect = TfidfVectorizer(strip_accents='unicode', analyzer='word', ngram_range=(1,2), max_df=0.5, min_df=5)
-
-training(text_tfidf_vect,'text')
-
-#Saving the DataFrame to the csv file
-val_data.to_csv(text_file_path, index=False)
+    #Saving the DataFrame to the csv file
+    val_data.to_csv(text_file_path, index=False)
