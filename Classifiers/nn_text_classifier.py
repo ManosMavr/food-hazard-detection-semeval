@@ -101,6 +101,7 @@ def training(vectorizer,column):
 
 
 if __name__ == "__main__":
+    
     #Loading the data
     trainset = pd.read_csv('Datasets/cleaned_train.csv', index_col=0)
     val_data = pd.read_csv('Datasets/cleaned_val.csv', index_col=0)
